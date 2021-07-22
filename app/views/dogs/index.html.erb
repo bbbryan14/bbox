@@ -1,1 +1,7 @@
 <%= render partial: 'thumbnail', collection: @dogs, as: :dog %>
+
+<nav>
+<% @pages.each do |p| %>
+  <a href="<%= url_for('/dogs') + "?page=#{p}"%>"> <%= p %> </a>
+<% end %>
+</nav>

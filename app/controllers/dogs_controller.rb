@@ -68,7 +68,7 @@ class DogsController < ApplicationController
   # PATCH/PUT /dogs/1.json
   def update
     respond_to do |format|
-      if @dog.update(dog_params)
+      if current_user && @dog.user && @dog.user.id == current_user.id && @dog.update(dog_params)
         @dog.images.attach(params[:dog][:image]) if params[:dog][:image].present?
 
         format.html { redirect_to @dog, notice: 'Dog was successfully updated.' }
@@ -83,9 +83,13 @@ class DogsController < ApplicationController
   # DELETE /dogs/1
   # DELETE /dogs/1.json
   def destroy
-    @dog.destroy
-    respond_to do |format|
-      format.html { redirect_to dogs_url, notice: 'Dog was successfully destroyed.' }
+    if current_user && @dog.user && @dog.user.id == current_user.id && @dog.destroy
+      respond_to do |format|
+        format.html { redirect_to dogs_url, notice: 'Dog was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      format.html { redirect_to dogs_url, notice: 'Dog was not successfully destroyed.' }
       format.json { head :no_content }
     end
   end

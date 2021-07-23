@@ -69,6 +69,7 @@ class DogsController < ApplicationController
   def update
     respond_to do |format|
       if current_user && @dog.user && @dog.user.id == current_user.id && @dog.update(dog_params)
+
         @dog.images.attach(params[:dog][:image]) if params[:dog][:image].present?
 
         format.html { redirect_to @dog, notice: 'Dog was successfully updated.' }
@@ -102,6 +103,6 @@ class DogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def dog_params
-      params.require(:dog).permit(:name, :description, :images)
+      params.require(:dog).permit(:name, :description, :images => [])
     end
 end
